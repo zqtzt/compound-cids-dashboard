@@ -33,12 +33,17 @@ const maps = [
 const timeChart = new TimeSeriesChart($('timeseriesChart'), {onYearClick: year => changeYear(year)});
 const barChart = new BarChart($('barChart'), {});
 
+function preferredLanguage() {
+  try {
+    const lang = localStorage.getItem('compound-cids-language');
+    return ['en', 'zh'].includes(lang) ? lang : 'en';
+  } catch { return 'en'; }
+}
+
 function readLocation() {
   const params = new URLSearchParams(location.hash.slice(1));
   const requestedYear = Number(params.get('year'));
-  let lang = 'en';
-  try { lang = localStorage.getItem('compound-cids-language') || 'en'; } catch {}
-  if (params.has('lang')) lang = params.get('lang');
+  let lang = params.has('lang') ? params.get('lang') : preferredLanguage();
   if (!['en', 'zh'].includes(lang)) lang = 'en';
   let selected = null;
   if (params.has('lon') && params.has('lat')) {
@@ -53,15 +58,24 @@ function readLocation() {
   };
 }
 
-function writeLocation() {
-  const params = new URLSearchParams({
-    year: String(state.year), depth: state.layer, mode: state.toeMode, lang: state.lang,
-  });
+function viewLocation({explicitLanguage = false} = {}) {
+  const params = new URLSearchParams();
+  if (state.year !== END_YEAR) params.set('year', String(state.year));
+  if (state.layer !== 'epipelagic') params.set('depth', state.layer);
+  if (state.toeMode !== 'year') params.set('mode', state.toeMode);
+  if (state.lang !== 'en' || state.lang !== preferredLanguage() || explicitLanguage) {
+    params.set('lang', state.lang);
+  }
   if (state.selected) {
     params.set('lat', state.selected.lat.toFixed(1));
     params.set('lon', state.selected.lon.toFixed(1));
   }
-  history.replaceState(null, '', location.pathname + location.search + '#' + params);
+  const fragment = params.toString();
+  return location.origin + location.pathname + location.search + (fragment ? '#' + fragment : '');
+}
+
+function writeLocation() {
+  history.replaceState(null, '', viewLocation());
 }
 
 function applyLanguage() {
@@ -435,9 +449,9 @@ function bindControls() {
     }));
   $('chartBackdrop').addEventListener('click', closeChartExpansion);
   $('copyButton').addEventListener('click', async () => {
-    writeLocation();
-    try { await navigator.clipboard.writeText(location.href); showToast(tr(state.lang, 'copied')); }
-    catch { showToast(location.href); }
+    const shareLocation = viewLocation({explicitLanguage: true});
+    try { await navigator.clipboard.writeText(shareLocation); showToast(tr(state.lang, 'copied')); }
+    catch { showToast(shareLocation); }
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
