@@ -1,0 +1,12 @@
+{
+  "name": "compound-ocean-cids-explorer",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A static, bilingual annual compound ocean CID dashboard for GitHub Pages.",
+  "scripts": {
+    "test": "node --test tests/data.test.mjs",
+    "start": "python3 -m http.server 8765 --bind 127.0.0.1",
+    "build": "python3 scripts/build_site.py"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "years": 36,
+  "range": [
+    1990,
+    2025
+  ],
+  "layers": 3,
+  "scientific_grid_values_checked": 34992000,
+  "coverage_values_checked": 648,
+  "maximum_absolute_percentage_error": 2.1316282072803006e-14,
+  "domain_cells": 35706,
+  "domain_area_km2": 346338596.055336,
+  "method": "Full NC-to-binary comparison; independently decoded NC flag meanings and cosine-area integration"
+}

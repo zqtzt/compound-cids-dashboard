@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "method": "Observed browser interactions through cua_repl",
+  "tested_viewports": [
+    {"width":1920,"height":1080,"horizontal_overflow":false},
+    {"width":1280,"height":900,"horizontal_overflow":false},
+    {"width":390,"height":844,"horizontal_overflow":false},
+    {"width":320,"height":760,"horizontal_overflow":false}
+  ],
+  "checks": {
+    "year_controls_1990_to_2025": true,
+    "timeline_below_title_above_maps": true,
+    "maps": 4,
+    "default_series": 6,
+    "default_bars": 18,
+    "curve_click_synchronizes_maps_bar_and_year_to_2010": true,
+    "play_2024_stops_at_2025": true,
+    "play_at_2025_restarts_1990": true,
+    "main_map_click_25_5N_39_5W_epipelagic_toe_1996": true,
+    "surface_map_click_changes_depth_and_toe_2005": true,
+    "english_chinese_switch": true,
+    "direction_mode_has_nine_category_legend": true,
+    "hide_T_series_gives_five_lines_and_fifteen_bars": true,
+    "chart_expansion_persists_and_restores": true,
+    "black_dot_meaning_visible_below_ToE_heading": true,
+    "three_low_colour_swatches_removed": true,
+    "low_coverage_values_and_family_hidden_in_inspection": true,
+    "same_app_boots_from_site_subdirectory": true
+  },
+  "verified_low_nonsignificant_example": {
+    "year":2024,
+    "layer":"mesopelagic",
+    "latitude":-35.5,
+    "longitude":-144.5,
+    "toe":2019,
+    "exposure_display":"—",
+    "significance_display":"Not significant"
+  },
+  "browser_console_messages": []
+}
