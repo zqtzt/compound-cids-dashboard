@@ -2,14 +2,14 @@ import {EXPOSURE_COLORS, DIRECTION_COLORS, MISSING_TOE,
         exposureFamily, hexRgb, toeColor, gridAt} from './data.js';
 import {tr} from './i18n.js';
 
-const OCEAN = [9, 27, 42];
+const OCEAN = [247, 250, 252];
 
 export function exposureRgb(level, family) {
   if (level < 1 || level > 3) return [0, 0, 0, 0];
   if (level === 1) return [...OCEAN, 255];
   if (family < 0) return [0, 0, 0, 0];
   const source = hexRgb(EXPOSURE_COLORS[family]);
-  const alpha = [.30, .65, .98][level - 1];
+  const alpha = [.30, .45, .90][level - 1];
   return source.map((v, k) => Math.round(v * alpha + OCEAN[k] * (1 - alpha))).concat(255);
 }
 
@@ -120,20 +120,20 @@ export class GridMap {
     ctx.rect(0, 0, this.width, this.height);
     ctx.clip();
     const geo = this.geometry();
-    ctx.fillStyle = '#091b2a';
+    ctx.fillStyle = '#f7fafc';
     ctx.fillRect(0, 0, this.width, this.height);
 
     // Draw land first: finite published coastal cells are not masked out.
     for (const segment of this.coastline.segments) {
       this.pathCoast(ctx, segment, geo);
-      ctx.fillStyle = segment.water ? '#091b2a' : '#263e4d';
+      ctx.fillStyle = segment.water ? '#f7fafc' : '#d9dfe3';
       ctx.fill();
     }
     const topLeft = this.xy(-180, 90, geo);
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(this.raster, topLeft[0], topLeft[1], 360 * geo.scale, 180 * geo.scale);
 
-    ctx.strokeStyle = '#8babba16';
+    ctx.strokeStyle = '#9aabb83b';
     ctx.lineWidth = .6;
     for (let lon = -180; lon <= 180; lon += 60) {
       const a = this.xy(lon, 90, geo), b = this.xy(lon, -90, geo);
@@ -144,7 +144,7 @@ export class GridMap {
       ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke();
     }
     // Coast lines provide geographic context without overwriting cell values.
-    ctx.strokeStyle = '#b4cbd24a';
+    ctx.strokeStyle = '#82939e99';
     ctx.lineWidth = this.options.kind === 'exposure' ? .55 : .38;
     for (const segment of this.coastline.segments) {
       this.pathCoast(ctx, segment, geo); ctx.stroke();
@@ -153,14 +153,16 @@ export class GridMap {
     else this.drawAxes(ctx, geo);
     if (this.state.selected) {
       const [x, y] = this.xy(this.state.selected.lon, this.state.selected.lat, geo);
-      ctx.strokeStyle = '#e9fbf6'; ctx.lineWidth = 1.2;
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 3.5;
+      ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = '#243b4b'; ctx.lineWidth = 1.4;
       ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.stroke();
       ctx.beginPath();
       ctx.moveTo(x - 10, y); ctx.lineTo(x - 6.5, y);
       ctx.moveTo(x + 6.5, y); ctx.lineTo(x + 10, y);
       ctx.moveTo(x, y - 10); ctx.lineTo(x, y - 6.5);
       ctx.moveTo(x, y + 6.5); ctx.lineTo(x, y + 10); ctx.stroke();
-      ctx.fillStyle = '#a7ebce'; ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#243b4b'; ctx.beginPath(); ctx.arc(x, y, 1.8, 0, Math.PI * 2); ctx.fill();
     }
     ctx.restore();
   }
@@ -168,7 +170,7 @@ export class GridMap {
     const planes = this.dataset.layers[this.layer];
     const zoom = this.options.getView().zoom;
     const stride = zoom < 2 ? 4 : zoom < 4 ? 2 : 1;
-    ctx.fillStyle = '#091a24c9';
+    ctx.fillStyle = '#15212ddd';
     for (let j = 0; j < 180; j += stride) {
       for (let i = 0; i < 360; i += stride) {
         const index = j * 360 + i;
@@ -181,20 +183,20 @@ export class GridMap {
     }
   }
   drawAxes(ctx, geo) {
-    if (this.width < 350) return;
-    ctx.font = '9px "SFMono-Regular",Consolas,monospace';
-    ctx.fillStyle = '#7d9aaa'; ctx.textAlign = 'center';
+    if (this.width < 500) return;
+    ctx.font = '11px Arial,sans-serif';
+    ctx.fillStyle = '#657884'; ctx.textAlign = 'center';
     for (let lon = -120; lon <= 120; lon += 60) {
       const [x] = this.xy(lon, 0, geo);
       if (x < 40 || x > this.width - 30) continue;
       ctx.fillText(lon === 0 ? '0°' : Math.abs(lon) + '°' + (lon < 0 ? 'W' : 'E'),
                    x, this.height - 10);
     }
-    ctx.textAlign = 'left';
+    ctx.textAlign = 'right';
     for (const lat of [-60, 0, 60]) {
       const [, y] = this.xy(0, lat, geo);
       if (y < 12 || y > this.height - 25) continue;
-      ctx.fillText(lat === 0 ? '0°' : Math.abs(lat) + '°' + (lat < 0 ? 'S' : 'N'), 8, y - 4);
+      ctx.fillText(lat === 0 ? '0°' : Math.abs(lat) + '°' + (lat < 0 ? 'S' : 'N'), this.width - 8, y - 4);
     }
   }
   pointerPosition(event) {

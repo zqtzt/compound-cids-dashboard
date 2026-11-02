@@ -1,13 +1,15 @@
 export const LAYERS = ['surface', 'epipelagic', 'mesopelagic'];
 export const SERIES = ['T', 'S', 'DO', 'TDO', 'TS', 'TSDO'];
 export const SERIES_LABELS = ['T', 'S', 'DO', 'T + DO', 'T + S', 'T + S + DO'];
-export const SERIES_COLORS = ['#f38c78', '#8589ff', '#f176da', '#a4db58', '#59b9fa', '#f0f5fa'];
-export const DEPTH_COLORS = ['#66c6de', '#a594e5', '#e7b879'];
-export const EXPOSURE_COLORS = ['#66c99c', '#a58ad9', '#a7b5c9'];
+export const SERIES_COLORS = ['#b54d3c', '#386b9f', '#80649e', '#839547', '#2d8d96', '#24292e'];
+export const DEPTH_COLORS = ['#b3cbdc', '#6c98b6', '#245d82'];
+export const EXPOSURE_COLORS = ['#3c7c68', '#527f9c', '#b46745'];
 export const DIRECTION_COLORS = [
-  '#183141', '#ef967e', '#f2c266', '#5cb9e5', '#b4a2df',
-  '#ea9250', '#91cace', '#d67cc0', '#c5cb78', '#8ba2ec',
+  '#f7fafc', '#c96e4b', '#b39639', '#5692b6', '#81709b',
+  '#c59b72', '#69a6a1', '#b97995', '#9aa55f', '#6c7ca3',
 ];
+export const TOE_COLORS = ['#e5eef5', '#bfd4e4', '#8fb2cc', '#5487ad', '#245d82'];
+const TOE_STOPS = TOE_COLORS.map(hexRgb);
 export const MISSING_TOE = 65535;
 export const MISSING_CATEGORY = 255;
 export const START_YEAR = 1990;
@@ -139,7 +141,7 @@ export class DatasetStore {
 export function toeColor(year) {
   if (!Number.isFinite(year) || year === MISSING_TOE) return [0, 0, 0, 0];
   // Fixed scale: dates before the slider range use the <=1990 colour.
-  const stops = [[53, 70, 119], [55, 117, 145], [87, 169, 166], [160, 202, 146], [242, 219, 132]];
+  const stops = TOE_STOPS;
   const t = Math.max(0, Math.min(1, (year - 1990) / 35)) * 4;
   const k = Math.min(3, Math.floor(t));
   const f = t - k;

@@ -67,7 +67,7 @@ test('low exposure is hidden and remaining grades show meanings rather than code
   assert.equal(exposureLabel('en', null), 'No mapped value');
   assert.equal(confidenceLabel('en', 0), 'Not significant');
   assert.equal(confidenceLabel('en', null), 'Not assessed');
-  for (const family of [-1, 0, 1, 2]) assert.deepEqual(exposureRgb(1, family), [9, 27, 42, 255]);
+  for (const family of [-1, 0, 1, 2]) assert.deepEqual(exposureRgb(1, family), [247, 250, 252, 255]);
   assert.notDeepEqual(exposureRgb(2, 0), exposureRgb(3, 0));
 });
 

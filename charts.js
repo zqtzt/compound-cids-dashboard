@@ -117,14 +117,14 @@ export class TimeSeriesChart extends BaseChart {
       class: 'current-line'});
     const labelX = Math.max(this.plot.left + 22, Math.min(this.plot.right - 20, x));
     append(this.svg, 'rect', {x: labelX - 20, y: this.plot.top - 5, width: 40, height: 15,
-      rx: 3, fill: '#1d4248'});
+      rx: 1, fill: '#fff', stroke: '#d5dce1', 'stroke-width': .7});
     append(this.svg, 'text', {x: labelX, y: this.plot.top + 6,
       'text-anchor': 'middle', class: 'year-label'}, this.state.year);
     const record = this.statistics.records[this.state.year - START_YEAR];
     SERIES.forEach((key, index) => {
       if (!this.state.series[index]) return;
       append(this.svg, 'circle', {cx: x, cy: this.y(record.layers[this.state.layer][key].percent),
-        r: 2.3, fill: SERIES_COLORS[index], stroke: '#0d2030', 'stroke-width': 1});
+        r: 2.3, fill: SERIES_COLORS[index], stroke: '#fff', 'stroke-width': 1});
     });
     this.hoverLine = append(this.svg, 'line', {y1: this.plot.top, y2: this.plot.bottom,
       x1: x, x2: x, visibility: 'hidden', class: 'hover-line'});
@@ -177,14 +177,14 @@ export class BarChart extends BaseChart {
       append(this.svg, 'text', {x: labelX, y: labelY,
         'text-anchor': this.width < 400 ? 'end' : 'middle',
         transform: this.width < 400 ? 'rotate(-35 ' + labelX + ' ' + labelY + ')' : '',
-        style: 'font-size:10px'}, SERIES_LABELS[item.index].replaceAll(' ', ''));
+        style: 'font-size:12px'}, SERIES_LABELS[item.index].replaceAll(' ', ''));
       LAYERS.forEach((layer, depthIndex) => {
         const value = record.layers[layer][item.key].percent;
         const height = (this.plot.bottom - this.plot.top) * value / 100;
         const x = center + (depthIndex - 1) * (barWidth + 2) - barWidth / 2;
         append(this.svg, 'rect', {x, y: this.plot.bottom - height,
           width: barWidth, height, rx: 1, fill: DEPTH_COLORS[depthIndex],
-          opacity: layer === this.state.layer ? 1 : .68});
+          stroke: layer === this.state.layer ? '#36566b' : 'none', 'stroke-width': .7});
       });
     });
   }

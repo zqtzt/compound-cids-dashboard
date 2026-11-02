@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#081725">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f2f4f5">
   <meta name="description" content="Explore annual compound ocean climatic impact-drivers from 1990 to 2025: exposure, time of emergence, direction and area coverage across three depths.">
-  <title>Compound Ocean State · CIDs Explorer</title>
+  <title>Compound ocean climate change</title>
   <link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./app.js"></script>
@@ -30,17 +30,11 @@
   <main class="app-shell" id="app">
     <header class="masthead">
       <div class="brand">
-        <img class="brand-mark" src="./assets/mark.svg" width="43" height="43" alt="">
-        <div>
-          <p class="eyebrow" data-i18n="eyebrow">OCEAN CLIMATIC IMPACT-DRIVERS</p>
-          <h1 data-i18n="title">Compound ocean state</h1>
-          <p class="subtitle" data-i18n="subtitle">A spatial and temporal view of a changing ocean</p>
-        </div>
+        <h1 data-i18n="title">Compound ocean climate change</h1>
       </div>
       <div class="masthead-actions">
-        <div class="assessment"><span data-i18n="assessment">ASSESSMENT YEAR</span><strong id="headerYear">2025</strong></div>
-        <div class="header-separator"></div>
         <button class="language-button" id="languageButton" type="button" data-i18n-aria="language" aria-label="Switch to Chinese"><span id="enLabel" class="active-language">EN</span><span class="language-divider">/</span><span id="zhLabel">中</span></button>
+        <button class="icon-button" id="copyButton" type="button" data-i18n-aria="copyLink" aria-label="Copy this view"><svg><use href="#i-link"/></svg></button>
         <button class="icon-button" id="aboutButton" type="button" data-i18n-aria="about" aria-label="About the data"><svg><use href="#i-info"/></svg></button>
         <button class="icon-button" id="fullscreenButton" type="button" data-i18n-aria="fullscreen" aria-label="Fullscreen"><svg><use href="#i-expand"/></svg></button>
       </div>
@@ -63,7 +57,7 @@
     <section class="dashboard" aria-label="Compound ocean CID dashboard">
       <section class="panel exposure-panel" id="exposurePanel">
         <div class="panel-heading">
-          <div><p class="eyebrow" data-i18n="exposureEyebrow">SPATIAL ASSESSMENT</p><h2 data-i18n="exposureTitle">Ocean exposure</h2></div>
+          <h2 data-i18n="exposureTitle">Ocean exposure</h2>
           <div class="segmented depth-controls" role="group" data-i18n-aria="layer" aria-label="Depth layer">
             <button type="button" data-layer="surface" data-i18n="surface" aria-pressed="false">Surface</button>
             <button type="button" data-layer="epipelagic" data-i18n="epipelagic" aria-pressed="true">0–200 m</button>
@@ -78,10 +72,8 @@
             <button class="map-button" id="resetMapButton" type="button" data-i18n-aria="resetMap" aria-label="Reset map view"><svg><use href="#i-reset"/></svg></button>
           </div>
           <span class="map-coordinate" id="mapCoordinate"></span>
-          <span class="map-resolution" data-i18n="resolution">1° × 1° grid</span>
         </div>
         <div class="exposure-legend" id="exposureLegend"></div>
-        <p class="map-instruction" data-i18n="mapHint">Click to inspect a grid cell · scroll to zoom · drag to pan</p>
       </section>
 
       <section class="toe-panel" aria-labelledby="toeHeading">
@@ -95,15 +87,15 @@
         <p class="confidence-key"><i class="confidence-dot" aria-hidden="true"></i><span data-i18n="confidenceLegend">Black dots: ToE not significant at the 95% level</span></p>
         <div class="toe-stack">
           <section class="mini-map-panel">
-            <div class="mini-map-heading"><h3 data-i18n="surfaceLong">Surface · 0 m</h3><span class="current-year">2025</span></div>
+            <div class="mini-map-heading"><h3 data-i18n="surfaceLong">Surface · 0 m</h3></div>
             <div class="map-stage" id="toeSurface"></div>
           </section>
           <section class="mini-map-panel">
-            <div class="mini-map-heading"><h3 data-i18n="epipelagicLong">Epipelagic · 0–200 m</h3><span class="current-year">2025</span></div>
+            <div class="mini-map-heading"><h3 data-i18n="epipelagicLong">Epipelagic · 0–200 m</h3></div>
             <div class="map-stage" id="toeEpipelagic"></div>
           </section>
           <section class="mini-map-panel">
-            <div class="mini-map-heading"><h3 data-i18n="mesopelagicLong">Mesopelagic · 200–1000 m</h3><span class="current-year">2025</span></div>
+            <div class="mini-map-heading"><h3 data-i18n="mesopelagicLong">Mesopelagic · 200–1000 m</h3></div>
             <div class="map-stage" id="toeMesopelagic"></div>
           </section>
         </div>
@@ -112,7 +104,7 @@
 
       <section class="panel chart-panel timeseries-panel" id="timeseriesPanel">
         <div class="panel-heading chart-heading">
-          <div><p class="eyebrow" data-i18n="statsEyebrow">ANNUAL EVOLUTION</p><h2 data-i18n="statsTitle">Emergence coverage</h2></div>
+          <h2 data-i18n="statsTitle">Emergence coverage</h2>
           <div class="chart-actions"><span class="depth-badge" id="chartDepth">0–200 m</span>
             <a class="icon-button" href="./data/annual_coverage.csv" download data-i18n-aria="csv" aria-label="Download area statistics (CSV)"><svg><use href="#i-download"/></svg></a>
             <button class="icon-button" type="button" data-expand="timeseriesPanel" data-i18n-aria="expand" aria-label="Expand chart"><svg><use href="#i-expand"/></svg></button>
@@ -120,26 +112,22 @@
         </div>
         <div class="series-legend" id="seriesLegend"></div>
         <div class="chart-container" id="timeseriesChart" role="img" aria-label="Six overlapping annual CID coverage series"></div>
-        <p class="chart-note" data-i18n="statsNote">Displayed significant CIDs · shared analysis area · overlapping sets</p>
+        <p class="chart-note" data-i18n="statsNote">Indicators overlap; percentages cannot be added.</p>
       </section>
 
       <section class="panel chart-panel bar-panel" id="barPanel">
         <div class="panel-heading chart-heading">
-          <div><p class="eyebrow" data-i18n="barEyebrow">SAME YEAR · THREE DEPTHS</p><h2 data-i18n="barTitle">Compare ocean layers</h2></div>
+          <h2 data-i18n="barTitle">Compare ocean layers</h2>
           <div class="chart-actions"><span class="year-badge current-year">2025</span>
             <button class="icon-button" type="button" data-expand="barPanel" data-i18n-aria="expand" aria-label="Expand chart"><svg><use href="#i-expand"/></svg></button>
           </div>
         </div>
         <div class="depth-legend" id="depthLegend"></div>
         <div class="chart-container" id="barChart" role="img" aria-label="Six CID coverage indicators compared across three ocean depths"></div>
-        <p class="chart-note" data-i18n="barNote">Each indicator includes its participating compound categories.</p>
       </section>
     </section>
 
-    <footer class="page-footer">
-      <span><span class="status-dot"></span><span id="statusText" data-i18n="loading">Loading annual assessment…</span><span class="footer-divider">/</span><span data-i18n="domainShort">Shared analysis domain: 69.5°S–67.5°N</span></span>
-      <span class="footer-right">v2.0<span class="footer-divider">/</span><span data-i18n="fit">2025 full-period fit</span><button class="plain-button" id="copyButton" type="button" data-i18n-aria="copyLink" aria-label="Copy this view"><svg><use href="#i-link"/></svg></button></span>
-    </footer>
+    <p id="statusText" class="sr-only" role="status" data-i18n="loading">Loading annual assessment…</p>
   </main>
 
   <section class="dataset-description" id="datasetDescription" lang="en" aria-label="Dataset overview, usage and references">
@@ -172,7 +160,7 @@
   <div class="map-tooltip" id="mapTooltip" role="status" hidden></div>
   <div class="chart-tooltip" id="chartTooltip" hidden></div>
   <div class="toast" id="toast" role="status" hidden></div>
-  <div class="loading-overlay" id="loadingOverlay"><div class="loading-content"><img src="./assets/mark.svg" width="50" height="50" alt=""><p id="loadingMessage" data-i18n="loading">Loading annual assessment…</p><button type="button" id="retryButton" class="primary-button" hidden data-i18n="retry">Try again</button></div></div>
+  <div class="loading-overlay" id="loadingOverlay"><div class="loading-content"><p id="loadingMessage" data-i18n="loading">Loading annual assessment…</p><button type="button" id="retryButton" class="primary-button" hidden data-i18n="retry">Try again</button></div></div>
 
   <dialog id="coordinateDialog" class="coordinate-dialog">
     <form id="coordinateForm">
@@ -185,7 +173,7 @@
   </dialog>
 
   <dialog id="aboutDialog" class="about-dialog">
-    <div class="dialog-heading"><div><p class="eyebrow">COMPOUND CIDs EXPLORER</p><h2 data-i18n="aboutTitle">About this ocean assessment</h2></div><button type="button" class="icon-button close-dialog" data-dialog="aboutDialog" data-i18n-aria="close" aria-label="Close"><svg><use href="#i-close"/></svg></button></div>
+    <div class="dialog-heading"><h2 data-i18n="aboutTitle">About the data</h2><button type="button" class="icon-button close-dialog" data-dialog="aboutDialog" data-i18n-aria="close" aria-label="Close"><svg><use href="#i-close"/></svg></button></div>
     <div class="about-body">
       <p class="about-intro" data-i18n="aboutIntro"></p>
       <h3 data-i18n="aboutDataTitle"></h3><p data-i18n="aboutData"></p>

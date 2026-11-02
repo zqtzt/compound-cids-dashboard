@@ -1,5 +1,5 @@
 import {DatasetStore, LAYERS, SERIES, SERIES_LABELS, SERIES_COLORS, DEPTH_COLORS,
-        DIRECTION_COLORS, START_YEAR, END_YEAR, gridAt, cellValues} from './data.js';
+        DIRECTION_COLORS, TOE_COLORS, START_YEAR, END_YEAR, gridAt, cellValues} from './data.js';
 import {tr, formatCoordinate, exposureLabel, confidenceLabel} from './i18n.js';
 import {GridMap, exposureRgb} from './maps.js';
 import {TimeSeriesChart, BarChart, escapeHtml, placeTooltip} from './charts.js';
@@ -80,7 +80,7 @@ function writeLocation() {
 
 function applyLanguage() {
   document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
-  document.title = state.lang === 'zh' ? '海洋复合状态 · CID 互动大屏' : 'Compound Ocean State · CIDs Explorer';
+  document.title = state.lang === 'zh' ? '海洋复合气候变化' : 'Compound ocean climate change';
   document.querySelectorAll('[data-i18n]').forEach(node => {
     node.textContent = tr(state.lang, node.dataset.i18n);
   });
@@ -101,20 +101,18 @@ function applyLanguage() {
 function renderLegends() {
   if (legendLanguage !== state.lang) {
     const familyNames = ['single', 'double', 'triple'];
-    let html = '<div class="family-legend">';
+    let html = '<div class="exposure-key"><span aria-hidden="true"></span>';
     familyNames.forEach((key, family) => {
       html += '<button class="family-toggle" type="button" data-family="' + family
         + '" aria-pressed="true"><span class="family-toggle-label"><span class="family-check">✓</span>'
-        + escapeHtml(tr(state.lang, key)) + '</span><span class="family-gradient" aria-hidden="true">';
-      [2, 3].forEach(level => {
-        html += '<i style="background:rgb(' + exposureRgb(level, family).slice(0, 3).join(',') + ')"></i>';
-      });
-      html += '</span></button>';
+        + escapeHtml(tr(state.lang, key)) + '</span></button>';
     });
-    html += '</div><div class="grade-labels">';
     ['medium', 'high'].forEach((key, index) => {
-      html += '<span><i class="grade-dot" style="opacity:' + [.65, 1][index]
-        + '"></i>' + escapeHtml(tr(state.lang, key)) + '</span>';
+      html += '<span class="exposure-key-level">' + escapeHtml(tr(state.lang, key)) + '</span>';
+      familyNames.forEach((_, family) => {
+        html += '<i class="exposure-key-swatch" aria-hidden="true" style="background:rgb('
+          + exposureRgb(index + 2, family).slice(0, 3).join(',') + ')"></i>';
+      });
     });
     html += '</div>';
     $('exposureLegend').innerHTML = html;
@@ -138,7 +136,8 @@ function renderLegends() {
   const key = state.lang + ':' + state.toeMode;
   if (toeLegendKey !== key) {
     if (state.toeMode === 'year') {
-      $('toeLegend').innerHTML = '<div class="toe-gradient"></div><div class="toe-legend-labels">'
+      $('toeLegend').innerHTML = '<div class="toe-gradient" style="background:linear-gradient(90deg,'
+        + TOE_COLORS.join(',') + ')"></div><div class="toe-legend-labels">'
         + '<span>≤1990</span><span>' + escapeHtml(tr(state.lang, 'toeYear'))
         + '</span><span>2025</span></div>';
     } else {
@@ -152,7 +151,6 @@ function renderLegends() {
 }
 
 function renderControls() {
-  $('headerYear').textContent = state.year;
   document.querySelectorAll('.current-year').forEach(node => { node.textContent = state.year; });
   $('yearSlider').value = state.year;
   $('yearSlider').setAttribute('aria-valuetext', String(state.year));
@@ -304,7 +302,7 @@ function renderDetail() {
   }
   html += '</tbody></table><p class="detail-domain">'
     + tr(state.lang, store.domain[point.index] ? 'insideDomain' : 'outsideDomain')
-    + '</p><p class="detail-footnote">' + tr(state.lang, 'gridCentre') + '</p>';
+    + '</p>';
   $('detailContent').innerHTML = html;
 }
 
